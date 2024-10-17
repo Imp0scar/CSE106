@@ -1,0 +1,20 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgb(12, 34, 41);
+}
+
+.login-box {
+  background-color: rgb(162, 33, 33);
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+h1 {
+  color: pink;
+}

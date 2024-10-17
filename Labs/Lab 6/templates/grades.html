@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Grades</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="content">
+        <div>
+          <button type="button" id="getGrades" onclick="getAllGrades()">Click here to get grades</button><br>
+        </div>
+        <div>
+          <button type="button" id="setGrade" onclick="editGrades()">Click here to set a grade to a student:</button>
+          <input type="text" id="studentName" name="Student" placeholder="Enter student name">
+          <input type="number" id="grade" name="grade" value="val"><br>
+        </div>
+        <div>
+          <button type="button" id="getStudentGrades" onclick="getStudentGrades()">Specific student's name:</button>
+          <input type="text" id="studentName" name="studentName" placeholder="Enter student name">
+        </div>
+        <div>
+          <button type="button" id="addStudent" onclick="newStudent()">Add new Student</button>
+          <input type="text" id="newStudentName" name="newStudentName" placeholder="Enter student name">
+          <input type="number" id="newStudentGrade" name="newStudentGrade" placeholder="Enter student grade">
+        </div>
+        <div>
+          <button type="button" id="removeStudent" onclick="delStudent()">Remove a Student</button>
+          <input type="text" id="removeStudentName" name="removeStudentName" placeholder="Enter student name">
+        </div>
+      </div>
+
+      <div class="output">
+        <div id="demo"></div>
+      </div>
+    </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
+  </body>
+</html>

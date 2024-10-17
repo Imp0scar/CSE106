@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Grade Manager</h1>
+    <div class="section">
+        <h2>Get Students Grade</h2>
+        <input type="text" id="text1" placeholder="Enter student name">
+        <button onclick="getStudentGrades()">Fetch Grade</button>
+        <div id="studentGrades" class="result"></div>
+    </div>
+    <div class="section">
+        <h2>View All Grades</h2>
+        <button onclick="getAllGrades()">View All Grades</button>
+        <div id="grades" class="result"></div>
+    </div>
+    <div class="section">
+        <h2>Add New Grade</h2>
+        <input type="text" id="text2" placeholder="Enter student name">
+        <input type="text" id="text3" placeholder="Enter grade">
+        <button onclick="newStudentGrade()">Add Grade</button>
+        <div id="newStudentGrade" class="result"></div>
+    </div>
+    <div class="section">
+        <h2>Edit Grade</h2>
+        <input type="text" id="text4" placeholder="Enter student name">
+        <input type="text" id="text5" placeholder="Enter new grade">
+        <button onclick="changeGrade()">Edit Grade</button>
+        <div id="newGrade" class="result"></div>
+    </div>
+    <div class="section">
+        <h2>Delete Grade</h2>
+        <input type="text" id="text6" placeholder="Enter student name">
+        <button onclick="deleteStudentGrade()">Delete Grade</button>
+        <div id="deleteStudentGrade" class="result"></div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
+
