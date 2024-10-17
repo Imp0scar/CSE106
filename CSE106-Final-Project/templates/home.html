@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forum Home</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/forum.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="{{ url_for('home') }}">
+          <img src="{{ url_for('static', filename='logo.png') }}" width="30" height="30" alt="Logo">
+        </a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <form class="form-inline my-2 my-lg-0" action="{{ url_for('home') }}" method="post">
+                <input class="form-control mr-sm-2" type="search" name="search_query" placeholder="Search..." aria-label="Search">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              </form>
+            </li>
+          </ul>
+
+        <button id="darkModeToggle" class="btn btn-outline-light my-2 my-sm-0 ml-2 rounded-circle" style="width: 50px; height: 50px;margin-left: 10px;" data-mode="{{ 'dark' if current_user.dark_mode else 'light' }}">
+            <img src="{{ url_for('static', filename='night_mode.png') }}" width="40" height="40" alt="Dark">
+        </button>
+
+        
+
+          <form class="form-inline my-2 my-lg-0" action="{{ url_for('logout') }}">
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Logout</button>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          </form>
+        </div>
+      </nav>
+    <br>
+    <div class="container">
+        <h1>Create a New Post</h1>
+        <form action="{{ url_for('create_post') }}" method="post" enctype="multipart/form-data" class="post-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="Post Title" required>
+            </div>
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea class="form-control" id="content" name="content" rows="3" placeholder="Write your post content here..." required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">Image/Video</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/*,video/*">
+
+            </div>
+            
+        
+            <!-- Add a hidden input to store the dark mode value -->
+            <input type="hidden" name="dark_mode" id="darkModeInput" value="{{ 'dark' if current_user.dark_mode else 'light' }}">
+        
+            <input type="submit" value="Create Post">
+
+            <!-- <button type="submit" class="btn btn-primary">Submit Post</button>-->
+        </form>
+        
+        <hr>
+        <h1>Forum Posts</h1>
+
+        <!-- Search Form -->
+        <!-- <form action="{{ url_for('home') }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="text" name="search_query" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form> -->
+        {% for post in posts %}
+        <div class="post">
+            <h2>{{ post.title }}</h2>
+            {% if post.image_filename %}
+                {% if post.image_filename.endswith(('.png', '.jpg', '.jpeg', '.gif')) %}
+                    <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}" alt="Post image">
+                {% elif post.image_filename.endswith(('.mp4', '.mov')) %}
+                    <video controls>
+                        <source src="{{ url_for('static', filename='uploads/' + post.image_filename) }}" type="video/mp4">
+                    </video>
+                {% endif %}
+            {% endif %}
+            <p>{{ post.content }}</p>
+            <p id="likes-{{ post.id }}" class="like-count">{{ post.likes }}</p>
+        
+            <form class="like-form" data-post-id="{{ post.id }}" action="javascript:void(0);" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <button type="button" class="like-button">👍</button>
+            </form>
+            
+            <form class="dislike-form" data-post-id="{{ post.id }}" action="javascript:void(0);" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <button type="button" class="dislike-button">👎</button>
+            </form>
+            <br>
+            <p id="dislikes-{{ post.id }}" class="dislike-count">{{ post.dislikes }}</p>
+        
+            <!-- {{ csrf_token() }} -->
+        
+            <div id="comments-{{ post.id }}" class="comments">
+                {% for comment in post.comments %}
+                    <div class="comment">
+                        <strong>{{ comment.author.username }}</strong>: {{ comment.content }}
+                        <p id="likes-comment-{{ comment.id }}" class="like-count">{{ comment.likes }}</p>
+                        
+                        <form class="like-comment-form" data-comment-id="{{ comment.id }}" action="javascript:void(0);" method="post">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <button type="button" class="like-button">👍</button>
+                        </form>
+                        
+                        <form class="dislike-comment-form" data-comment-id="{{ comment.id }}" action="javascript:void(0);" method="post">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <button type="button" class="dislike-button">👎</button>
+                        </form>
+        
+                        <p id="dislikes-comment-{{ comment.id }}" class="dislike-count">{{ comment.dislikes }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <form class="comment-form" data-post-id="{{ post.id }}" action="javascript:void(0);" method="post">
+                <!-- {{ csrf_token() }} -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input class="comment-input" type="text" name="comment" placeholder="Write a comment...">
+                <input type="submit" value="Comment">
+            </form>
+        </div>
+        {% endfor %}
+        
+    </div>
+    <script src="../static/forumActions.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
